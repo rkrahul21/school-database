@@ -1,26 +1,24 @@
 'use client'
 
-import React from 'react'
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-function page() {
-    const [schools, setSchools] = useState([]);
+function Page() {
+  const [schools, setSchools] = useState([]);
 
   useEffect(() => {
-    fetch('/api/getSchools')
+    fetch('/api/getSchool')
       .then((res) => res.json())
-      .then((data) => setSchools(data));
+      .then((data) => setSchools(data.schools || []));
   }, []);
 
   return (
-
-     <div className="p-4">
+    <div className="p-4">
       <h1 className="text-2xl font-bold mb-4 text-center">Schools</h1>
       <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {schools.map((school) => (
           <div key={school.id} className="border rounded shadow p-4">
             <img
-              src={school.image}
+              src={school.image ? `/schoolImages/${school.image}` : '/next.svg'}
               alt={school.name}
               className="w-full h-40 object-cover rounded mb-3"
             />
@@ -31,7 +29,7 @@ function page() {
         ))}
       </div>
     </div>
-  )
+  );
 }
 
-export default page
+export default Page;
