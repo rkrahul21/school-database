@@ -36,7 +36,7 @@ export default function SchoolForm() {
     <form onSubmit={handleSubmit(onSubmit)} encType="multipart/form-data" className="max-w-md mx-auto p-4 border rounded bg-white shadow">
       <h2 className="text-xl font-bold mb-4">Add School</h2>
       <div className="mb-2">
-        <label>Name:</label>
+        <label>School Name:</label>
         <input {...register("name", { required: "Name is required" })} className="border p-1 w-full" />
         {errors.name && <span className="text-red-500">{errors.name.message}</span>}
       </div>
@@ -70,7 +70,7 @@ export default function SchoolForm() {
         <input type="file" accept="image/*" {...register("image", { required: "Image is required" })} className="border p-1 w-full" />
         {errors.image && <span className="text-red-500">{errors.image.message}</span>}
       </div>
-      <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded">Submit</button>
+      <button type="submit" className="bg-green-600 text-white px-4 py-2 rounded text-center">Submit</button>
       {submitStatus && <div className="mt-2 text-center">{submitStatus}</div>}
     </form>
   );
