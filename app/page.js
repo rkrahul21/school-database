@@ -1,7 +1,7 @@
 'use client'
 
 
-import SchoolForm from "./add-school/SchoolForm";
+import SchoolForm from "./components/SchoolForm";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
