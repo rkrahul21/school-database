@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import connectDb from "@/app/lib/connectDb";
-import fs from "fs/promises";
-import path from "path";
-// Ensure the schools table exists
+import { uploadToS3 } from "@/app/lib/s3Upload";
+
 async function ensureSchoolsTable() {
   await connectDb.query(`
     CREATE TABLE IF NOT EXISTS schools (
@@ -35,24 +34,19 @@ export async function POST(req) {
       return NextResponse.json({ message: "All fields are required." }, { status: 400 });
     }
 
-    // Validate email
     const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
     if (!emailRegex.test(email_id)) {
       return NextResponse.json({ message: "Invalid email address." }, { status: 400 });
     }
 
-    // Save image to public/schoolImages
+    // Upload image to AWS S3
     const buffer = Buffer.from(await imageFile.arrayBuffer());
-    const imagesDir = path.join(process.cwd(), "public", "schoolImages");
-    await fs.mkdir(imagesDir, { recursive: true });
-    const imageName = Date.now() + "_" + imageFile.name.replace(/\s+/g, "_");
-    const imagePath = path.join(imagesDir, imageName);
-    await fs.writeFile(imagePath, buffer);
-
-    // Store data in MySQL
+  const imageName = Date.now() + "_" + imageFile.name.replace(/\s+/g, "_");
+  const imageUrl = await uploadToS3({ buffer, fileName: imageName });
+    console.log("Image uploaded to S3:", imageUrl);
     const [result] = await connectDb.query(
       "INSERT INTO schools (name, address, city, state, contact, image, email_id) VALUES (?, ?, ?, ?, ?, ?, ?)",
-      [name, address, city, state, contact, imageName, email_id]
+      [name, address, city, state, contact, imageUrl, email_id]
     );
 
     return NextResponse.json({ message: "School added successfully!" });

@@ -28,6 +28,7 @@ export default function SchoolForm() {
         setSubmitStatus("Failed to add school.");
       }
     } catch (err) {
+        console.log("form error",err) ;
       setSubmitStatus("Error occurred.");
     }
   };

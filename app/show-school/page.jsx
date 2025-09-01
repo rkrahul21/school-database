@@ -22,7 +22,7 @@ function Page() {
           {schools.map((school) => (
             <div key={school.id} className="border rounded shadow p-4 bg-green-50 flex flex-col items-center">
               <img
-                src={school.image ? `/schoolImages/${school.image}` : '/next.svg'}
+                src={school.image }
                 alt={school.name}
                 className="w-full h-40 object-cover rounded mb-3"
               />
